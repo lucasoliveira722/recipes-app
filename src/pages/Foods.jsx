@@ -3,6 +3,6 @@ import Header from '../components/Header';
 
 export default function Foods() {
   return (
-    <Header />
+    <Header title="Foods" />
   );
 }

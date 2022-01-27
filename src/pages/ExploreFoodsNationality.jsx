@@ -3,6 +3,6 @@ import Header from '../components/Header';
 
 export default function ExploreFoodsNationality() {
   return (
-    <Header />
+    <Header title="Explore Nationalities" />
   );
 }

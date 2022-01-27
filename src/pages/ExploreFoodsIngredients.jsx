@@ -3,6 +3,6 @@ import Header from '../components/Header';
 
 export default function ExploreFoodsIngredients() {
   return (
-    <Header />
+    <Header title="Explore Ingredients" />
   );
 }
