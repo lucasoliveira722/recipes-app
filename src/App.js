@@ -6,6 +6,7 @@ import Provider from './Context/Provider';
 
 function App() {
   return (
+
     <Provider>
       <Routes />
     </Provider>
