@@ -1,5 +1,8 @@
 import React from 'react';
+import Header from '../components/Header';
 
 export default function ExploreFoodsIngredients() {
-  return <div>Explore Foods Ingredients</div>;
+  return (
+    <Header />
+  );
 }
