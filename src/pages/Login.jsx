@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import AppContext from '../Context/AppContext';
 
 export default function Login() {
@@ -10,22 +11,12 @@ export default function Login() {
     enable,
     setEnable,
   } = useContext(AppContext);
-  // function enableEnterButton() {
-  //   const mailformat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-  //   const passwordMin = 6;
-  //   const { password, email } = this.state;
-  //   if ((password.length >= passwordMin) && (email.match(mailformat))) {
-  //     this.setState({
-  //       enterEnabled: false,
-  //     });
-  //   } else {
-  //     this.setState({
-  //       enterEnabled: true,
-  //     });
-  //   }
-  // }
+
+  const history = useHistory();
+
   // FUNÇÃO DE VALIDAÇÃO DO BOTÃO DE LOGIN: O MESMO DEVE TER UM DISABLED BASEADO NO ESTADO, E DEVE MUDAR QUANDO CUMPRIR OS REQUISITOS DESSA FUNÇÃO
 
+  // regex de validação de email tirado de https://www.w3resource.com/javascript/form/email-validation.php
   useEffect(() => {
     const mailformat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
     const passwordMin = 6;
@@ -35,6 +26,14 @@ export default function Login() {
       setEnable(true);
     }
   }, [email, password, setEnable]);
+
+  function handleClick() {
+    const emailToken = { email };
+    localStorage.setItem('mealsToken', '1');
+    localStorage.setItem('cocktailsToken', '1');
+    localStorage.setItem('user', JSON.stringify(emailToken));
+    history.push('/foods');
+  }
 
   // lidar com o input nos hooks tirado de: https://stackoverflow.com/questions/55757761/handle-an-input-with-react-hooks
   return (
@@ -62,7 +61,7 @@ export default function Login() {
           <button
             data-testid="login-submit-btn"
             type="submit"
-            // onClick={ handleClick }
+            onClick={ handleClick }
             disabled={ enable }
           >
             Entrar
