@@ -6,13 +6,16 @@ function Provider({ children }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [enable, setEnable] = useState(true);
+  const [search, setSearch] = useState('ingredient');
   const contextValue = {
     email,
     password,
     enable,
+    search,
     setEmail,
     setPassword,
     setEnable,
+    setSearch,
   };
 
   return (

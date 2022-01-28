@@ -1,6 +1,36 @@
 import React from 'react';
+import AppContext from '../context/AppContext';
+import searchIngredientAPI from '../services/searchIngredientApi';
+import searchNameAPI from '../services/searchNameAPI';
+import searchFirstLetterAPI from '../services/searchFirstLetterAPI';
 
 export default function HeaderInput() {
+  const {
+    search,
+    setSearch,
+  } = useContext(AppContext);
+
+  function toggleFetchValue(target) {
+    setSearch(target.value);
+  }
+
+  async function toggleFetch() {
+  // Armazenar no estado o valor do radio button que está selecionado, para que isso defina para qual endpoint será feito a fetch. Implementar também um alerta para a busca de uma letra caso tenha mais de uma (DICA: utilizar o global.alert para evitar erro de lint)
+    if (search === 'ingredient') {
+      const ingredientFetched = await searchIngredientAPI();
+      console.log(ingredientFetched);
+    } else if (search === 'name') {
+      const ingredientFetched = await searchNameAPI();
+      console.log(ingredientFetched);
+    } else {
+      if (search.length > 1) {
+        global.alert('Your search must have only 1 (one) character');
+      }
+      const ingredientFetched = await searchFirstLetterAPI();
+      console.log(ingredientFetched);
+    }
+  }
+
   return (
     <div>
       <input
@@ -16,7 +46,7 @@ export default function HeaderInput() {
           id="ingredient"
           name="ingredient"
           value="ingredient"
-          onChange={toggleFetchValue}
+          onChange={ toggleFetchValue }
         />
         Ingredient
       </label>
@@ -27,7 +57,7 @@ export default function HeaderInput() {
           id="name"
           name="name"
           value="name"
-          onChange={toggleFetchValue}
+          onChange={ toggleFetchValue }
         />
         Name
       </label>
@@ -38,34 +68,17 @@ export default function HeaderInput() {
           id="first-letter"
           name="first-letter"
           value="first-letter"
-          onChange={toggleFetchValue}
+          onChange={ toggleFetchValue }
         />
         First Letter
       </label>
       <button
         type="button"
         data-testid="exec-search-btn"
-        onClick={toggleFetch}
+        onClick={ toggleFetch }
       >
         Search
       </button>
     </div>
   );
-}
-
-function toggleFetchValue(target) {
-  return target;
-};
-
-function async toggleFetch() {
-  // Armazenar no estado o valor do radio button que está selecionado, para que isso defina para qual endpoint será feito a fetch. Implementar também um alerta para a busca de uma letra caso tenha mais de uma (DICA: utilizar o global.alert para evitar erro de lint)
-
-  // if( endpoint 1) {
-//    const ingredientFetched = await searchIngredientAPI();
-//    setIngredient(ingredient)
-  // }
-    // else if (endpoint 2)
-
-  // else (endpoint 3)
-
 }
