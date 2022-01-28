@@ -7,7 +7,9 @@ import searchFirstLetterAPI from '../services/searchFirstLetterAPI';
 export default function HeaderInput() {
   const {
     search,
+    searchField,
     setSearch,
+    setSearchField,
   } = useContext(AppContext);
 
   function toggleFetchValue(target) {
@@ -15,20 +17,20 @@ export default function HeaderInput() {
   }
 
   async function toggleFetch() {
-  // Armazenar no estado o valor do radio button que está selecionado, para que isso defina para qual endpoint será feito a fetch. Implementar também um alerta para a busca de uma letra caso tenha mais de uma (DICA: utilizar o global.alert para evitar erro de lint)
     if (search === 'ingredient') {
-      const ingredientFetched = await searchIngredientAPI();
+      const ingredientFetched = await searchIngredientAPI(searchField);
       console.log(ingredientFetched);
     } else if (search === 'name') {
-      const ingredientFetched = await searchNameAPI();
+      const ingredientFetched = await searchNameAPI(searchField);
       console.log(ingredientFetched);
     } else {
-      if (search.length > 1) {
+      if (searchField.length > 1) {
         global.alert('Your search must have only 1 (one) character');
       }
-      const ingredientFetched = await searchFirstLetterAPI();
+      const ingredientFetched = await searchFirstLetterAPI(searchField);
       console.log(ingredientFetched);
     }
+    // Armazenar no estado o valor do radio button que está selecionado, para que isso defina para qual endpoint será feito a fetch. Implementar também um alerta para a busca de uma letra caso tenha mais de uma (DICA: utilizar o global.alert para evitar erro de lint)
   }
 
   return (
@@ -38,6 +40,7 @@ export default function HeaderInput() {
         data-testid="search-input"
         placeholder="Search Recipe"
         name="search"
+        onChange={ (event) => setSearchField(event.target.value) }
       />
       <label htmlFor="ingredient">
         <input
