@@ -36,6 +36,7 @@ export default function Header({ title }) {
           </button>) : null }
       { searchInput && <HeaderInput /> }
     </header>
+
   );
 }
 
