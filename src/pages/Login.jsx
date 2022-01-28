@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import AppContext from '../Context/AppContext';
+import AppContext from '../context/AppContext';
 
 export default function Login() {
   const {
