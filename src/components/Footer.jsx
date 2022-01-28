@@ -4,7 +4,7 @@ import mealIcon from '../images/mealIcon.svg';
 import drinkIcon from '../images/drinkIcon.svg';
 import exploreIcon from '../images/exploreIcon.svg';
 
-export default function MenuInferior() {
+export default function Footer() {
   const history = useHistory();
 
   return (

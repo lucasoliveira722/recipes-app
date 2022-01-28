@@ -1,12 +1,12 @@
 import React from 'react';
 import Header from '../components/Header';
-import MenuInferior from '../components/MenuInferior';
+import Footer from '../components/Footer';
 
 export default function Drinks() {
   return (
     <>
       <Header title="Drinks" />
-      <MenuInferior />
+      <Footer />
     </>
   );
 }
