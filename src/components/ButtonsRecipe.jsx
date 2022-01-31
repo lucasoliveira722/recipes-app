@@ -7,6 +7,7 @@ function ButtonsRecipe(categoryName) {
     (async () => {
       const meals = await searchCategoryRecipe();
       setRecipeButton(meals.meals);
+      console.log(recipeButton);
     })();
   }, []);
 
