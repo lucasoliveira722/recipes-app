@@ -1,31 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import CardRecipe from '../components/CardRecipe';
+import AppContext from '../context/AppContext';
 
 export default function Drinks() {
-  const [recipes, setRecipes] = useState([]);
+  const urlDrinks = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
+  const { drinkRecipes, setDrinkRecipes, getRecipes } = useContext(AppContext);
   useEffect(() => {
     (async () => {
-      const drinks = await searchRecipes('drinks');
-      setRecipes(drinks.drinks);
+      const { drinks } = await getRecipes(urlDrinks);
+      setDrinkRecipes(drinks);
     })();
   }, []);
-  const twelve = 12;
-  console.log(recipes);
+  console.log(drinkRecipes);
+  const maxRecipes = 12;
   return (
-    <>
+    <div>
       <Header title="Drinks" />
-      {recipes
-        .map((recipe, index) => (index < twelve ? (
+      {drinkRecipes.slice(0, maxRecipes)
+        .map((recipe, index) => (
           <CardRecipe
-            key={ recipes.idDrink }
+            key={ recipe.idDrink }
             index={ index }
             url={ recipe.strDrinkThumb }
             name={ recipe.strDrink }
-          />)
-          : null))}
+          />))}
       <Footer />
-    </>
+    </div>
   );
 }

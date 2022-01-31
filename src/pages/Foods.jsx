@@ -1,33 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import CardRecipe from '../components/CardRecipe';
-import ButtonsRecipe from '../components/ButtonsRecipe';
-import searchRecipes from '../services/searchRecipesApi';
+// import ButtonsRecipe from '../components/ButtonsRecipe';
+import AppContext from '../context/AppContext';
 
 export default function Foods() {
-  const [recipes, setRecipes] = useState([]);
+  const urlFood = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
+  const { foodRecipes, setFoodRecipes, getRecipes } = useContext(AppContext);
   useEffect(() => {
     (async () => {
-      const meals = await searchRecipes('foods');
-      setRecipes(meals.meals);
+      const { meals } = await getRecipes(urlFood);
+      setFoodRecipes(meals);
     })();
   }, []);
-  console.log(recipes);
-  const twelve = 12;
+  // console.log(recipes);
+  const maxRecipes = 12;
   return (
     <>
       <Header title="Foods" />
-      <ButtonsRecipe title={ categoryName } />
-      {recipes
-        .map((recipe, index) => (index < twelve ? (
+      {/* <ButtonsRecipe title={ categoryName } /> */}
+      {foodRecipes.slice(0, maxRecipes)
+        .map((recipe, index) => (
           <CardRecipe
-            key={ recipes.idMeal }
+            key={ recipe.idMeal }
             index={ index }
             url={ recipe.strMealThumb }
             name={ recipe.strMeal }
-          />)
-          : null))}
+          />))}
       <Footer />
     </>
   );
