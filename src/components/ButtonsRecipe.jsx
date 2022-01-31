@@ -1,66 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import searchCategoryRecipe from '../services/searchCategoryRecipe';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-function ButtonsRecipe(categoryName) {
-  const [recipeButton, setRecipeButton] = useState({});
-  useEffect(() => {
-    (async () => {
-      const meals = await searchCategoryRecipe();
-      setRecipeButton(meals.meals);
-    })();
-  }, []);
-
+function ButtonsRecipe({ categoriesNames }) {
+  const maxCategories = 5;
   return (
     <div>
       <button
         type="button"
-        data-testid={ `${categoryName}-category-filter` }
+        data-testid="All-category-filter"
         // onClick={ () => }
       >
         All
       </button>
 
-      <button
-        type="button"
-        data-testid={ `${categoryName}-category-filter` }
-        // onClick={ () => }
-      >
-        Beef
-      </button>
-
-      <button
-        type="button"
-        data-testid={ `${categoryName}-category-filter` }
-        // onClick={ () => }
-      >
-        Lamb
-      </button>
-
-      <button
-        type="button"
-        data-testid={ `${categoryName}-category-filter` }
-        // onClick={ () => }
-      >
-        Chicken
-      </button>
-
-      <button
-        type="button"
-        data-testid={ `${categoryName}-category-filter` }
-        // onClick={ () => }
-      >
-        Breakfast
-      </button>
-
-      <button
-        type="button"
-        data-testid={ `${categoryName}-category-filter` }
-        // onClick={ () => }
-      >
-        Dessert
-      </button>
+      {categoriesNames.slice(0, maxCategories)
+        .map((category, index) => (
+          <button
+            key={ index }
+            type="button"
+            data-testid={ `${category.strCategory}-category-filter` }
+          >
+            {category.strCategory}
+          </button>
+        ))}
     </div>
   );
 }
+
+ButtonsRecipe.propTypes = {
+  categoriesNames: PropTypes.arrayOf,
+}.isRequired;
 
 export default ButtonsRecipe;

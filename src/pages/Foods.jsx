@@ -2,24 +2,33 @@ import React, { useContext, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import CardRecipe from '../components/CardRecipe';
-// import ButtonsRecipe from '../components/ButtonsRecipe';
+import ButtonsRecipe from '../components/ButtonsRecipe';
 import AppContext from '../context/AppContext';
 
 export default function Foods() {
   const urlFood = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
-  const { foodRecipes, setFoodRecipes, getRecipes } = useContext(AppContext);
+  const urlFoodCategory = 'https://www.themealdb.com/api/json/v1/1/list.php?c=list';
+  const { foodRecipes,
+    setFoodRecipes,
+    getRecipes,
+    foodCategories,
+    setFoodCategories,
+    getCategories } = useContext(AppContext);
   useEffect(() => {
     (async () => {
       const { meals } = await getRecipes(urlFood);
       setFoodRecipes(meals);
+      const mealsCategories = await getCategories(urlFoodCategory);
+      setFoodCategories(mealsCategories.meals);
     })();
   }, []);
+  console.log(1, foodCategories);
   // console.log(recipes);
   const maxRecipes = 12;
   return (
     <>
       <Header title="Foods" />
-      {/* <ButtonsRecipe title={ categoryName } /> */}
+      <ButtonsRecipe categoriesNames={ foodCategories } />
       {foodRecipes.slice(0, maxRecipes)
         .map((recipe, index) => (
           <CardRecipe
