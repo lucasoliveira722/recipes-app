@@ -22,7 +22,6 @@ export default function Drinks() {
       setDrinkCategories(categories.drinks);
     })();
   }, []);
-  console.log(drinkRecipes);
   const maxRecipes = 12;
   return (
     <div>

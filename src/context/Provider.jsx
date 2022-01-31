@@ -14,6 +14,7 @@ function Provider({ children }) {
   const [foodRecipes, setFoodRecipes] = useState([]);
   const [foodCategories, setFoodCategories] = useState([]);
   const [drinkCategories, setDrinkCategories] = useState([]);
+  const [categoryRecipes, setCategoryRecipes] = useState([]);
   const getRecipes = async (url) => {
     const result = await searchRecipes(url);
     return result;
@@ -43,6 +44,8 @@ function Provider({ children }) {
     drinkCategories,
     setDrinkCategories,
     getCategories,
+    categoryRecipes,
+    setCategoryRecipes,
   };
 
   return (
