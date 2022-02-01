@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import mealIcon from '../images/mealIcon.svg';
 import drinkIcon from '../images/drinkIcon.svg';
 import exploreIcon from '../images/exploreIcon.svg';
+import AppContext from '../context/AppContext';
 
 export default function Footer() {
   const history = useHistory();
+  const { setValidation } = useContext(AppContext);
 
   return (
     <footer
@@ -15,7 +17,7 @@ export default function Footer() {
         type="button"
         data-testid="food-bottom-btn"
         src={ mealIcon }
-        onClick={ () => history.push('/foods') }
+        onClick={ () => { history.push('/foods'); setValidation(true); } }
       >
         <img alt="Ícone de Comidas" src={ mealIcon } />
       </button>
@@ -24,7 +26,7 @@ export default function Footer() {
         type="button"
         data-testid="drinks-bottom-btn"
         src={ drinkIcon }
-        onClick={ () => history.push('/drinks') }
+        onClick={ () => { history.push('/drinks'); setValidation(true); } }
       >
         <img alt="Ícone de Bebidas" src={ drinkIcon } />
       </button>

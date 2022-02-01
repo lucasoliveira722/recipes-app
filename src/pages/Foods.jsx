@@ -13,7 +13,9 @@ export default function Foods() {
     getRecipes,
     foodCategories,
     setFoodCategories,
-    getCategories } = useContext(AppContext);
+    getCategories,
+    validation,
+    categoryRecipes } = useContext(AppContext);
   useEffect(() => {
     (async () => {
       const { meals } = await getRecipes(urlFood);
@@ -22,21 +24,28 @@ export default function Foods() {
       setFoodCategories(mealsCategories.meals);
     })();
   }, []);
-  console.log(1, foodCategories);
+  // console.log(1, foodCategories);
   // console.log(recipes);
   const maxRecipes = 12;
+  const mapFunction = (arr) => arr.map((recipe, index) => (
+    <CardRecipe
+      key={ recipe.idMeal }
+      index={ index }
+      url={ recipe.strMealThumb }
+      name={ recipe.strMeal }
+    />
+  ));
+  console.log('catF', categoryRecipes);
   return (
     <>
       <Header title="Foods" />
-      <ButtonsRecipe categoriesNames={ foodCategories } />
-      {foodRecipes.slice(0, maxRecipes)
-        .map((recipe, index) => (
-          <CardRecipe
-            key={ recipe.idMeal }
-            index={ index }
-            url={ recipe.strMealThumb }
-            name={ recipe.strMeal }
-          />))}
+      <ButtonsRecipe categoriesNames={ foodCategories } type="meals" />
+      {validation ? (
+        mapFunction(foodRecipes.slice(0, maxRecipes))
+      )
+        : (
+          mapFunction(categoryRecipes.slice(0, maxRecipes))
+        ) }
       <Footer />
     </>
   );

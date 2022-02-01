@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import searchByCategoryRecipe from '../services/searchByCategoryRecipe';
 import searchCategoryRecipe from '../services/searchCategoryRecipe';
 import searchRecipes from '../services/searchRecipesApi';
 import AppContext from './AppContext';
@@ -15,12 +16,17 @@ function Provider({ children }) {
   const [foodCategories, setFoodCategories] = useState([]);
   const [drinkCategories, setDrinkCategories] = useState([]);
   const [categoryRecipes, setCategoryRecipes] = useState([]);
+  const [validation, setValidation] = useState(true);
   const getRecipes = async (url) => {
     const result = await searchRecipes(url);
     return result;
   };
   const getCategories = async (url) => {
     const result = await searchCategoryRecipe(url);
+    return result;
+  };
+  const getRecipesByCategory = async (url) => {
+    const result = await searchByCategoryRecipe(url);
     return result;
   };
   const contextValue = {
@@ -46,6 +52,9 @@ function Provider({ children }) {
     getCategories,
     categoryRecipes,
     setCategoryRecipes,
+    getRecipesByCategory,
+    validation,
+    setValidation,
   };
 
   return (

@@ -13,7 +13,9 @@ export default function Drinks() {
     getRecipes,
     drinkCategories,
     setDrinkCategories,
-    getCategories } = useContext(AppContext);
+    getCategories,
+    validation,
+    categoryRecipes } = useContext(AppContext);
   useEffect(() => {
     (async () => {
       const { drinks } = await getRecipes(urlDrinks);
@@ -23,18 +25,29 @@ export default function Drinks() {
     })();
   }, []);
   const maxRecipes = 12;
+  console.log('cat', categoryRecipes);
+  const mapFunction = (arr) => arr.map((recipe, index) => (
+    <CardRecipe
+      key={ recipe.idDrink }
+      index={ index }
+      url={ recipe.strDrinkThumb }
+      name={ recipe.strDrink }
+    />
+  ));
+
   return (
     <div>
       <Header title="Drinks" />
-      <ButtonsRecipe categoriesNames={ drinkCategories } />
-      {drinkRecipes.slice(0, maxRecipes)
-        .map((recipe, index) => (
-          <CardRecipe
-            key={ recipe.idDrink }
-            index={ index }
-            url={ recipe.strDrinkThumb }
-            name={ recipe.strDrink }
-          />))}
+      <ButtonsRecipe categoriesNames={ drinkCategories } type="drinks" />
+      { validation ? (
+        mapFunction(drinkRecipes.slice(0, maxRecipes))
+      )
+        : (
+          mapFunction(categoryRecipes.slice(0, maxRecipes))
+
+        )}
+
+      )
       <Footer />
     </div>
   );
