@@ -6,19 +6,11 @@ function ButtonsRecipe({ categoriesNames, type }) {
   const [actualCategory, setActualCategory] = useState('');
   const [urlCategory, setUrlCategory] = useState('');
   useEffect(() => {
-<<<<<<< HEAD
     if (type === 'drinks') {
       setUrlCategory('https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=');
     } else if (type === 'meals') {
       setUrlCategory('https://www.themealdb.com/api/json/v1/1/filter.php?c=');
     }
-=======
-    (async () => {
-      const meals = await searchCategoryRecipe();
-      setRecipeButton(meals.meals);
-      console.log(recipeButton);
-    })();
->>>>>>> e894ac40cf570c8c03c2e999f5e75908f7f5c10a
   }, []);
   const {
     setCategoryRecipes,
