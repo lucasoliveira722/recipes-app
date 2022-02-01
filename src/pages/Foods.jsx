@@ -37,7 +37,7 @@ export default function Foods() {
       name={ recipe.strMeal }
     />
   ));
-  console.log('catF', categoryRecipes);
+  // console.log('catF', categoryRecipes);
   return (
     <>
       <Header title="Foods" />
