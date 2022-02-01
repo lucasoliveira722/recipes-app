@@ -26,9 +26,11 @@ export default function Drinks() {
   }, []);
   const maxRecipes = 12;
   console.log('cat', categoryRecipes);
-  const mapFunction = (arr) => arr.map((recipe, index) => (
+  const mapFunction = (arr, type) => arr.map((recipe, index) => (
     <CardRecipe
+      type={ type }
       key={ recipe.idDrink }
+      id={ recipe.idDrink }
       index={ index }
       url={ recipe.strDrinkThumb }
       name={ recipe.strDrink }
@@ -40,10 +42,10 @@ export default function Drinks() {
       <Header title="Drinks" />
       <ButtonsRecipe categoriesNames={ drinkCategories } type="drinks" />
       { validation ? (
-        mapFunction(drinkRecipes.slice(0, maxRecipes))
+        mapFunction(drinkRecipes.slice(0, maxRecipes), 'drinks')
       )
         : (
-          mapFunction(categoryRecipes.slice(0, maxRecipes))
+          mapFunction(categoryRecipes.slice(0, maxRecipes), 'drinks')
 
         )}
 
