@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import randomDrinks from '../services/searchExploreDrinksApi';
 
 export default function ExploreDrinks() {
+  const [randomDrink, setRandomDrink] = useState(0);
   const history = useHistory();
+
+  useEffect(() => {
+    const Api = async () => {
+      const result = await randomDrinks();
+      setRandomDrink(result[0].idDrink);
+    };
+    Api();
+  }, []);
   return (
     <>
       <Header title="Explore Drinks" />
@@ -18,7 +28,7 @@ export default function ExploreDrinks() {
       <button
         type="button"
         data-testid="explore-surprise"
-        // onClick={ }
+        onClick={ () => history.push(`/drinks/${randomDrink}`) }
       >
         Surprise me!
       </button>
