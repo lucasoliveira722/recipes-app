@@ -1,14 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import searchByIdRecipe from '../services/searchByIdRecipe';
 import searchRecipes from '../services/searchRecipesApi';
-import AppContext from '../context/AppContext';
 
 export default function FoodDetails({ match: { params: { id } } }) {
   const [detailsId, setDetailsId] = useState({});
   const [recommended, setRecommended] = useState([]);
-  const { setStartedRecipes, startedRecipes } = useContext(AppContext);
+  const [idLocalS, setIdLocalS] = useState([]);
+  const [idFinish, setIdFinish] = useState([]);
   const history = useHistory();
   useEffect(() => {
     (async () => {
@@ -18,6 +18,19 @@ export default function FoodDetails({ match: { params: { id } } }) {
       const resultRe = await searchRecipes('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
       const recommends = resultRe.drinks;
       setRecommended(recommends);
+      if (localStorage.getItem('inProgressRecipes')) {
+        const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
+        const { meals } = inProgressRecipes;
+        setIdLocalS(Object.keys(meals));
+        console.log('1', Object.keys(meals));
+      }
+      if (localStorage.getItem('doneRecipes')) {
+        const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+        const ids = doneRecipes.map((recipe) => (
+          recipe.id
+        ));
+        setIdFinish(ids);
+      }
     })();
   }, []);
   console.log(detailsId);
@@ -40,10 +53,20 @@ export default function FoodDetails({ match: { params: { id } } }) {
   ));
   const maxRecommends = 6;
   const startButton = () => {
-    setStartedRecipes((prev) => [...prev, id]);
+    if (localStorage.getItem('inProgressRecipes')) {
+      const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
+      const { meals } = inProgressRecipes;
+      meals[id] = [];
+      localStorage
+        .setItem('inProgressRecipes', JSON.stringify({ ...inProgressRecipes, meals }));
+    } else {
+      localStorage.setItem('inProgressRecipes', JSON.stringify({
+        meals: { [id]: [] },
+        drinks: {},
+      }));
+    }
     history.push(`/foods/${id}/in-progress`);
   };
-  console.log('btn-start', startedRecipes);
   console.log(id);
 
   return (
@@ -117,14 +140,19 @@ export default function FoodDetails({ match: { params: { id } } }) {
             </button>
           ))}
       </div>
-      <button
-        style={ { position: 'fixed', bottom: 0 } }
-        type="button"
-        data-testid="start-recipe-btn"
-        onClick={ () => startButton() }
-      >
-        Start
-      </button>
+      {
+        idFinish.includes(id) !== true && (
+          <button
+            style={ { position: 'fixed', bottom: 0 } }
+            type="button"
+            data-testid="start-recipe-btn"
+            onClick={ () => startButton() }
+          >
+            {idLocalS.includes(id) ? 'Continue Recipe' : 'Start' }
+          </button>
+
+        )
+      }
     </div>
   );
 }
