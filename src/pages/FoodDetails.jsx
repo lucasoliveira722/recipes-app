@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import searchByIdRecipe from '../services/searchByIdRecipe';
 import searchRecipes from '../services/searchRecipesApi';
+import AppContext from '../context/AppContext';
 
 export default function FoodDetails({ match: { params: { id } } }) {
   const [detailsId, setDetailsId] = useState({});
   const [recommended, setRecommended] = useState([]);
-  // const [video, setVideo] = useState('');
+  const { setStartedRecipes, startedRecipes } = useContext(AppContext);
+  const history = useHistory();
   useEffect(() => {
     (async () => {
       const resultId = await searchByIdRecipe(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
@@ -36,9 +39,12 @@ export default function FoodDetails({ match: { params: { id } } }) {
     )
   ));
   const maxRecommends = 6;
-  // if (detailsId.strYoutube !== '') {
-  //   setVideo(detailsId.strYoutube.replace('watch?v', 'embed/'));
-  // }
+  const startButton = () => {
+    setStartedRecipes((prev) => [...prev, id]);
+    history.push(`/foods/${id}/in-progress`);
+  };
+  console.log('btn-start', startedRecipes);
+  console.log(id);
 
   return (
     <div>
@@ -115,6 +121,7 @@ export default function FoodDetails({ match: { params: { id } } }) {
         style={ { position: 'fixed', bottom: 0 } }
         type="button"
         data-testid="start-recipe-btn"
+        onClick={ () => startButton() }
       >
         Start
       </button>

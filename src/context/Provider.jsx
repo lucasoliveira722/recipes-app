@@ -17,6 +17,7 @@ function Provider({ children }) {
   const [drinkCategories, setDrinkCategories] = useState([]);
   const [categoryRecipes, setCategoryRecipes] = useState([]);
   const [validation, setValidation] = useState(true);
+  const [startedRecipes, setStartedRecipes] = useState([]);
   const getRecipes = async (url) => {
     const result = await searchRecipes(url);
     return result;
@@ -55,6 +56,8 @@ function Provider({ children }) {
     getRecipesByCategory,
     validation,
     setValidation,
+    startedRecipes,
+    setStartedRecipes,
   };
 
   return (

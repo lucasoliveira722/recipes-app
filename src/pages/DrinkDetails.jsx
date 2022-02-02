@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import searchByIdRecipe from '../services/searchByIdRecipe';
 import searchRecipes from '../services/searchRecipesApi';
+import AppContext from '../context/AppContext';
 
 export default function DrinkDetails({ match: { params: { id } } }) {
   const [detailsId, setDetailsId] = useState({});
   const [recommended, setRecommended] = useState([]);
+  const { startedRecipes, setStartedRecipes } = useContext(AppContext);
+  const history = useHistory();
   useEffect(() => {
     (async () => {
       const result = await searchByIdRecipe(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
@@ -35,6 +39,11 @@ export default function DrinkDetails({ match: { params: { id } } }) {
     )
   ));
   const maxRecommends = 6;
+  const startButton = () => {
+    setStartedRecipes((prev) => [...prev, id]);
+    history.push(`/drinks/${id}/in-progress`);
+  };
+  console.log(startedRecipes);
   return (
     <div>
       <h1 data-testid="recipe-category">{detailsId.strAlcoholic}</h1>
@@ -101,6 +110,7 @@ export default function DrinkDetails({ match: { params: { id } } }) {
         style={ { position: 'fixed', bottom: 0 } }
         type="button"
         data-testid="start-recipe-btn"
+        onClick={ () => startButton() }
       >
         Start
       </button>
