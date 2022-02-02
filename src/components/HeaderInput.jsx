@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import AppContext from '../context/AppContext';
 import searchIngredientAPI from '../services/searchIngredientApi';
 import searchNameAPI from '../services/searchNameAPI';
@@ -12,25 +13,46 @@ export default function HeaderInput() {
     setSearchField,
   } = useContext(AppContext);
 
+  const history = useHistory();
+  const finalLocation = history.location.pathname;
+
   function toggleFetchValue(target) {
-    setSearch(target.value);
+    setSearch(target);
   }
 
-  async function toggleFetch() {
+  function pathPush(path, id) {
+    if (path === '/foods') {
+      history.push(`${path}/${id}`);
+    }
+    history.push(`${path}/${id}`);
+  }
+
+  async function handleClick() {
     if (search === 'ingredient') {
-      const ingredientFetched = await searchIngredientAPI(searchField);
+      const ingredientFetched = await searchIngredientAPI(searchField, finalLocation);
       console.log(ingredientFetched);
+      if (ingredientFetched.length === 1) {
+        pathPush(finalLocation, ingredientFetched.meals[0].idMeal);
+      }
     } else if (search === 'name') {
-      const ingredientFetched = await searchNameAPI(searchField);
-      console.log(ingredientFetched);
-    } else {
+      const ingredientFetched = await searchNameAPI(searchField, finalLocation);
+      // console.log(ingredientFetched.meals[0].idMeal);
+      // console.log(ingredientFetched.meals.length);
+      if (finalLocation === '/foods' && ingredientFetched.meals.length === 1) {
+        pathPush(finalLocation, ingredientFetched.meals[0].idMeal);
+        // console.log('ACHEI UM');
+      }
+      if (finalLocation === '/drinks' && ingredientFetched.drinks.length === 1) {
+        pathPush(finalLocation, ingredientFetched.drinks[0].idDrink);
+      }
+    } else if (search === 'first-letter') {
       if (searchField.length > 1) {
         global.alert('Your search must have only 1 (one) character');
       }
-      const ingredientFetched = await searchFirstLetterAPI(searchField);
+      const ingredientFetched = await searchFirstLetterAPI(searchField, finalLocation);
       console.log(ingredientFetched);
+      pathPush(finalLocation, ingredientFetched.meals[0].idMeal);
     }
-    // Armazenar no estado o valor do radio button que está selecionado, para que isso defina para qual endpoint será feito a fetch. Implementar também um alerta para a busca de uma letra caso tenha mais de uma (DICA: utilizar o global.alert para evitar erro de lint)
   }
 
   return (
@@ -49,7 +71,7 @@ export default function HeaderInput() {
           id="ingredient"
           name="searchFood"
           value="ingredient"
-          onChange={ toggleFetchValue }
+          onChange={ (e) => toggleFetchValue(e.target.value) }
         />
         Ingredient
       </label>
@@ -60,7 +82,7 @@ export default function HeaderInput() {
           id="name"
           name="searchFood"
           value="name"
-          onChange={ toggleFetchValue }
+          onChange={ (e) => toggleFetchValue(e.target.value) }
         />
         Name
       </label>
@@ -71,14 +93,14 @@ export default function HeaderInput() {
           id="first-letter"
           name="searchFood"
           value="first-letter"
-          onChange={ toggleFetchValue }
+          onChange={ (e) => toggleFetchValue(e.target.value) }
         />
         First Letter
       </label>
       <button
         type="button"
         data-testid="exec-search-btn"
-        onClick={ toggleFetch }
+        onClick={ handleClick }
       >
         Search
       </button>
