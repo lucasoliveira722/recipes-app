@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import AppContext from '../context/AppContext';
 import searchIngredientAPI from '../services/searchIngredientApi';
 import searchNameAPI from '../services/searchNameAPI';
@@ -47,7 +47,7 @@ export default function HeaderInput() {
           type="radio"
           data-testid="ingredient-search-radio"
           id="ingredient"
-          name="ingredient"
+          name="searchFood"
           value="ingredient"
           onChange={ toggleFetchValue }
         />
@@ -58,7 +58,7 @@ export default function HeaderInput() {
           type="radio"
           data-testid="name-search-radio"
           id="name"
-          name="name"
+          name="searchFood"
           value="name"
           onChange={ toggleFetchValue }
         />
@@ -69,7 +69,7 @@ export default function HeaderInput() {
           type="radio"
           data-testid="first-letter-search-radio"
           id="first-letter"
-          name="first-letter"
+          name="searchFood"
           value="first-letter"
           onChange={ toggleFetchValue }
         />

@@ -1,7 +1,7 @@
-const url = 'https://www.themealdb.com/api/json/v1/1/search.php?s={nome}';
+const url = (value) => `https://www.themealdb.com/api/json/v1/1/search.php?s=${value}`;
 
-const searchNameAPI = async () => {
-  const response = await fetch(url);
+const searchNameAPI = async (value) => {
+  const response = await fetch(url(value));
   const data = await response.json();
 
   return response.ok ? Promise.resolve(data) : Promise.reject(data);
