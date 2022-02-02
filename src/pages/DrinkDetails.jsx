@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import searchByIdRecipe from '../services/searchByIdRecipe';
 import searchRecipes from '../services/searchRecipesApi';
+import shareIcon from '../images/shareIcon.svg';
 
 export default function DrinkDetails({ match: { params: { id } } }) {
   const [detailsId, setDetailsId] = useState({});
   const [recommended, setRecommended] = useState([]);
   const [idLocalS, setIdLocalS] = useState([]);
   const [idFinish, setIdFinish] = useState([]);
+  const [show, setShow] = useState(false);
   const history = useHistory();
   useEffect(() => {
     (async () => {
@@ -20,9 +22,9 @@ export default function DrinkDetails({ match: { params: { id } } }) {
       setRecommended(recommends);
       if (localStorage.getItem('inProgressRecipes')) {
         const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
-        const { drinks } = inProgressRecipes;
-        setIdLocalS(Object.keys(drinks));
-        // console.log('1', Object.key(drinks));
+        const { cocktails } = inProgressRecipes;
+        setIdLocalS(Object.keys(cocktails));
+        console.log('1', Object.keys(cocktails));
       }
       if (localStorage.getItem('doneRecipes')) {
         const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
@@ -55,17 +57,21 @@ export default function DrinkDetails({ match: { params: { id } } }) {
   const startButton = () => {
     if (localStorage.getItem('inProgressRecipes')) {
       const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
-      const { drinks } = inProgressRecipes;
-      drinks[id] = [];
+      const { cocktails } = inProgressRecipes;
+      cocktails[id] = [];
       localStorage
-        .setItem('inProgressRecipes', JSON.stringify({ ...inProgressRecipes, drinks }));
+        .setItem('inProgressRecipes',
+          JSON.stringify({ ...inProgressRecipes, cocktails }));
     } else {
       localStorage.setItem('inProgressRecipes', JSON.stringify({
         meals: {},
-        drinks: { [id]: [] },
+        cocktails: { [id]: [] },
       }));
     }
     history.push(`/drinks/${id}/in-progress`);
+  };
+  const popUp = () => {
+    setShow(!show);
   };
   return (
     <div>
@@ -80,9 +86,17 @@ export default function DrinkDetails({ match: { params: { id } } }) {
       <button
         data-testid="share-btn"
         type="button"
+        src={ shareIcon }
+        // Referencia para o clipboard
+        // https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
+        onClick={ () => {
+          navigator.clipboard.writeText(`http://localhost:3000/drinks/${id}`);
+          popUp();
+        } }
       >
-        ShareBtn
+        <img src={ shareIcon } alt="Share Icon" />
       </button>
+      {show && (<span>Link copied!</span>)}
       <button
         data-testid="favorite-btn"
         type="button"

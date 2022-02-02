@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import searchByIdRecipe from '../services/searchByIdRecipe';
 import searchRecipes from '../services/searchRecipesApi';
+import shareIcon from '../images/shareIcon.svg';
 
 export default function FoodDetails({ match: { params: { id } } }) {
   const [detailsId, setDetailsId] = useState({});
   const [recommended, setRecommended] = useState([]);
   const [idLocalS, setIdLocalS] = useState([]);
   const [idFinish, setIdFinish] = useState([]);
+  const [show, setShow] = useState(false);
   const history = useHistory();
   useEffect(() => {
     (async () => {
@@ -62,13 +64,14 @@ export default function FoodDetails({ match: { params: { id } } }) {
     } else {
       localStorage.setItem('inProgressRecipes', JSON.stringify({
         meals: { [id]: [] },
-        drinks: {},
+        cocktails: {},
       }));
     }
     history.push(`/foods/${id}/in-progress`);
   };
-  console.log(id);
-
+  const popUp = () => {
+    setShow(!show);
+  };
   return (
     <div>
       <h1 data-testid="recipe-category">{detailsId.strCategory}</h1>
@@ -82,9 +85,17 @@ export default function FoodDetails({ match: { params: { id } } }) {
       <button
         data-testid="share-btn"
         type="button"
+        src={ shareIcon }
+        // Referencia para o clipboard
+        // https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
+        onClick={ () => {
+          navigator.clipboard.writeText(`http://localhost:3000/foods/${id}`);
+          popUp();
+        } }
       >
-        ShareBtn
+        <img src={ shareIcon } alt="Share Icon" />
       </button>
+      {show && (<span>Link copied!</span>)}
       <button
         data-testid="favorite-btn"
         type="button"
