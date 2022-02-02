@@ -76,7 +76,7 @@ export default function DrinkDetails({ match: { params: { id } } }) {
           .map((recipe, index) => (
             <button
               data-testid={ `${index}-recomendation-card` }
-              style={ { display: 'inline-block', width: 200 } }
+              style={ { display: 'inline-block', width: 250 } }
               type="button"
               key={ index }
             >
@@ -88,7 +88,7 @@ export default function DrinkDetails({ match: { params: { id } } }) {
                 />
                 <span
                   style={ { display: 'block' } }
-                  data-testid={ `${index}-recomedation-title` }
+                  data-testid={ `${index}-recomendation-title` }
                 >
                   {recipe.strMeal}
                 </span>

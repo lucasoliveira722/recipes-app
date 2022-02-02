@@ -90,19 +90,19 @@ export default function FoodDetails({ match: { params: { id } } }) {
           .map((recipe, index) => (
             <button
               data-testid={ `${index}-recomendation-card` }
-              style={ { display: 'inline-block', width: 200 } }
+              style={ { display: 'inline-block', width: 250 } }
               type="button"
               key={ index }
             >
               <div>
                 <img
-                  style={ { width: 180, height: 150 } }
+                  style={ { width: 200, height: 150 } }
                   src={ recipe.strDrinkThumb }
                   alt="recipe"
                 />
                 <span
                   style={ { display: 'block' } }
-                  data-testid={ `${index}-recomedation-title` }
+                  data-testid={ `${index}-recomendation-title` }
                 >
                   {recipe.strDrink}
                 </span>
