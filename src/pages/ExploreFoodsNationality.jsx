@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-// import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import {
@@ -10,15 +10,15 @@ import {
 import AppContext from '../context/AppContext';
 
 export default function ExploreFoodsNationality() {
-  // const history = useHistory();
-  const { foodRecipes, setFoodRecipes } = useContext(AppContext);
+  const history = useHistory();
+  const { foodCategories, setFoodCategories } = useContext(AppContext);
   const [nationalities, setNationalities] = useState([]);
   const [meals, setMeals] = useState([]);
-  const [country, setCountry] = useState('');
+  const [country, setCountry] = useState('All');
 
   const resultApi = async () => {
     const response = await getStrAreaNationalities();
-    setNationalities(Object.values(response.map((event) => event.strArea)));
+    setMeals(Object.values(response.map((event) => event.strArea)));
   };
 
   useEffect(() => {
@@ -29,18 +29,18 @@ export default function ExploreFoodsNationality() {
     const result = async (value) => {
       if (country === 'All') { return; }
       const response = await getFoodNationalities(value);
-      setMeals(response.map((e) => e));
+      setNationalities(response.map((event) => event));
     };
     result(country);
-  }, [setMeals, country]);
+  }, [setNationalities, country]);
 
   useEffect(() => {
     const setFoodsApi = async () => {
       const returnFoods = await getAllFoods();
-      setFoodRecipes(returnFoods);
+      setFoodCategories(returnFoods);
     };
     setFoodsApi();
-  }, [setFoodRecipes]);
+  }, [setFoodCategories]);
 
   return (
     <>
@@ -54,14 +54,53 @@ export default function ExploreFoodsNationality() {
         <option data-testid="All-option">
           All
         </option>
-        { nationalities.map((e) => (
+        { meals.map((event) => (
           <option
-            key={ e }
-            data-testid={ `${e}-option` }
+            key={ event }
+            data-testid={ `${event}-option` }
           >
-            {e}
+            {event}
           </option>))}
       </select>
+      {
+        (nationalities.length > 0 && country !== 'All') && (
+          nationalities.slice(0, +'12').map((food, index) => (
+            <button
+              key={ index }
+              type="button"
+              data-testid={ `${index}-recipe-card` }
+              onClick={ () => history.push(`/foods/${food.idMeal}`) }
+            >
+              <img
+                src={ food.strMealThumb }
+                alt="img food"
+                data-testid={ `${index}-card-img` }
+              />
+              <h1 data-testid={ `${index}-card-name` }>{ food.strMeal }</h1>
+            </button>
+          ))
+        )
+      }
+      {
+        (foodCategories.length > 1 && country === 'All')
+        && (foodCategories.slice(0, +'12').map((food, index) => (
+          <button
+            key={ index }
+            type="button"
+            data-testid={ `${index}-recipe-card` }
+            onClick={ () => history.push(`/foods/${food.idMeal}`) }
+          >
+            <img
+              style={ { width: 300 } }
+              src={ food.strMealThumb }
+              alt="img food"
+              data-testid={ `${index}-card-img` }
+            />
+            <h1 data-testid={ `${index}-card-name` }>{ food.strMeal }</h1>
+          </button>
+        ))
+        )
+      }
       <Footer />
     </>
   );

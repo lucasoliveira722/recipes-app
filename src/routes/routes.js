@@ -15,6 +15,7 @@ import FavoriteRecipes from '../pages/FavoriteRecipes';
 import ExploreFoodsIngredients from '../pages/ExploreFoodsIngredients';
 import ExploreDrinksIngredients from '../pages/ExploreDrinksIngredients';
 import ExploreFoodsNationality from '../pages/ExploreFoodsNationality';
+import ExploreDrinksNationality from '../pages/ExploreDrinksNationality';
 import ExploreDrinks from '../pages/ExploreDrinks';
 
 export default function routes() {
@@ -33,6 +34,11 @@ export default function routes() {
       <Route path="/explore/foods/ingredients" component={ ExploreFoodsIngredients } />
       <Route path="/explore/drinks/ingredients" component={ ExploreDrinksIngredients } />
       <Route path="/explore/foods/nationalities" component={ ExploreFoodsNationality } />
+      <Route
+        exact
+        path="/explore/drinks/nationalities"
+        component={ ExploreDrinksNationality }
+      />
       <Route path="/profile" component={ Profile } />
       <Route path="/done-recipes" component={ DoneRecipes } />
       <Route path="/favorite-recipes" component={ FavoriteRecipes } />
