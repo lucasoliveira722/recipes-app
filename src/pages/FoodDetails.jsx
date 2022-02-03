@@ -10,7 +10,8 @@ import AppContext from '../context/AppContext';
 export default function FoodDetails({ match: { params: { id } } }) {
   const urlRecommendation = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
   const { clickedFood } = useContext(AppContext);
-  const [detailsId, setDetailsId] = useState((clickedFood !== {}) ? clickedFood : {});
+  const [detailsId, setDetailsId] = useState((JSON.stringify(clickedFood) !== '{}')
+    ? clickedFood : {});
   const [idLocalS, setIdLocalS] = useState([]);
   const [idFinish, setIdFinish] = useState([]);
   const [show, setShow] = useState(false);
@@ -18,7 +19,7 @@ export default function FoodDetails({ match: { params: { id } } }) {
   const history = useHistory();
   const detailsFavotire = [detailsId];
   useEffect(() => {
-    if (detailsId === {}) {
+    if (JSON.stringify(clickedFood) === '{}') {
       (async () => {
         const resultId = await searchByIdRecipe(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
         const details = resultId.meals;
@@ -26,6 +27,7 @@ export default function FoodDetails({ match: { params: { id } } }) {
       })();
     }
     if (localStorage.getItem('inProgressRecipes')) {
+      console.log('entrou');
       const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
       const { meals } = inProgressRecipes;
       setIdLocalS(Object.keys(meals));
@@ -75,7 +77,7 @@ export default function FoodDetails({ match: { params: { id } } }) {
   const popUp = () => {
     setShow(!show);
   };
-  console.log('1', clickedFood);
+  console.log('1', detailsId);
   return (
     <div>
       {detailsId.idMeal
