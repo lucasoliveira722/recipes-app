@@ -35,6 +35,7 @@ export default function Foods() {
       index={ index }
       url={ recipe.strMealThumb }
       name={ recipe.strMeal }
+      recipe={ recipe }
     />
   ));
   // console.log('catF', categoryRecipes);

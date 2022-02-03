@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import AppContext from '../context/AppContext';
 
-export default function CardRecipe({ index, url, name, id, type }) {
+export default function CardRecipe({ index, url, name, id, type, recipe }) {
   const history = useHistory();
+  const { setClikedFood } = useContext(AppContext);
+  const cardBtn = () => {
+    history.push(`/${type}/${id}`);
+    setClikedFood(recipe);
+  };
   return (
     <button
       style={ {
@@ -11,7 +17,7 @@ export default function CardRecipe({ index, url, name, id, type }) {
       } }
       data-testid={ `${index}-recipe-card` }
       type="button"
-      onClick={ () => history.push(`/${type}/${id}`) }
+      onClick={ () => cardBtn() }
     >
       <img src={ url } alt="" data-testid={ `${index}-card-img` } />
       <span data-testid={ `${index}-card-name` }>{name}</span>
@@ -23,4 +29,5 @@ CardRecipe.propTypes = {
   index: PropTypes.number,
   url: PropTypes.string,
   name: PropTypes.string,
+  recipe: PropTypes.object,
 }.isRequired;
