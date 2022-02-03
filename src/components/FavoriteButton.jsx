@@ -31,7 +31,7 @@ export default function FavoriteButton({ details, idPage, type }) {
   };
   const checkFavoriteInLS = () => {
     const validate = favoriteInLS.map(({ id }) => id).some((id) => id === idPage);
-    setFavoriteRecipes(validate);
+    setFavorite(validate);
     return validate;
   };
 
