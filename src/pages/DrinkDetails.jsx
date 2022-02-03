@@ -73,50 +73,54 @@ export default function DrinkDetails({ match: { params: { id } } }) {
   };
   return (
     <div>
-      <h1 data-testid="recipe-category">{detailsId.strAlcoholic}</h1>
-      <h1 data-testid="recipe-title">{detailsId.strDrink}</h1>
-      <img
-        style={ { width: 200 } }
-        src={ detailsId.strDrinkThumb }
-        alt="recipephoto"
-        data-testid="recipe-photo"
-      />
-      <button
-        data-testid="share-btn"
-        type="button"
-        src={ shareIcon }
-        // Referencia para o clipboard
-        // https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
-        onClick={ () => {
-          navigator.clipboard.writeText(`http://localhost:3000/drinks/${id}`);
-          popUp();
-        } }
-      >
-        <img src={ shareIcon } alt="Share Icon" />
-      </button>
-      {show && (<span>Link copied!</span>)}
-      <FavoriteButton details={ detailsFavorite } idPage={ id } type="Drink" />
-      <ul>
-        {mapFilter(filter2Ingredient)}
-      </ul>
-      <ul>
-        {mapFilter(filter2Measure)}
-      </ul>
-      <p data-testid="instructions">{detailsId.strInstructions}</p>
-      <RecommendationCaroussel url={ urlRecommendation } type="meals" />
-      {
-        idFinish.includes(id) !== true && (
-          <button
-            style={ { position: 'fixed', bottom: 0 } }
-            type="button"
-            data-testid="start-recipe-btn"
-            onClick={ () => startButton() }
-          >
-            {idLocalS.includes(id) ? 'Continue Recipe' : 'Start' }
-          </button>
+      {detailsId.idDrink
+        && (
+          <>
+            <h1 data-testid="recipe-category">{detailsId.strAlcoholic}</h1>
+            <h1 data-testid="recipe-title">{detailsId.strDrink}</h1>
+            <img
+              style={ { width: 200 } }
+              src={ detailsId.strDrinkThumb }
+              alt="recipephoto"
+              data-testid="recipe-photo"
+            />
+            <button
+              data-testid="share-btn"
+              type="button"
+              src={ shareIcon }
+              // Referencia para o clipboard
+              // https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
+              onClick={ () => {
+                navigator.clipboard.writeText(`http://localhost:3000/drinks/${id}`);
+                popUp();
+              } }
+            >
+              <img src={ shareIcon } alt="Share Icon" />
+            </button>
+            {show && (<span>Link copied!</span>)}
+            <FavoriteButton details={ detailsFavorite } idPage={ id } type="Drink" />
+            <ul>
+              {mapFilter(filter2Ingredient)}
+            </ul>
+            <ul>
+              {mapFilter(filter2Measure)}
+            </ul>
+            <p data-testid="instructions">{detailsId.strInstructions}</p>
+            <RecommendationCaroussel url={ urlRecommendation } type="meals" />
+            {
+              idFinish.includes(id) !== true && (
+                <button
+                  style={ { position: 'fixed', bottom: 0 } }
+                  type="button"
+                  data-testid="start-recipe-btn"
+                  onClick={ () => startButton() }
+                >
+                  {idLocalS.includes(id) ? 'Continue Recipe' : 'Start' }
+                </button>
 
-        )
-      }
+              )
+            }
+          </>)}
     </div>
   );
 }

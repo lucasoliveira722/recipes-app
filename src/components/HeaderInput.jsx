@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import AppContext from '../context/AppContext';
 import searchIngredientAPI from '../services/searchIngredientApi';
 import searchNameAPI from '../services/searchNameAPI';

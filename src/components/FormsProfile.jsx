@@ -3,7 +3,14 @@ import { useHistory } from 'react-router-dom';
 
 export default function FormsProfile() {
   const history = useHistory();
-  const getLocalStorage = (e) => localStorage.getItem(e);
+  const getLocalStorage = (e) => {
+    if (localStorage.getItem(e)) {
+      return localStorage.getItem(e);
+    }
+    return (
+      JSON.stringify({ user: { email: '' } })
+    );
+  };
 
   const buttonLogout = () => {
     localStorage.clear();
