@@ -5,11 +5,12 @@ import AppContext from '../context/AppContext';
 
 export default function CardRecipe({ index, url, name, id, type, recipe }) {
   const history = useHistory();
-  const { setClikedFood } = useContext(AppContext);
+  const { setClickedFood } = useContext(AppContext);
   const cardBtn = () => {
     history.push(`/${type}/${id}`);
-    setClikedFood(recipe);
+    setClickedFood(recipe);
   };
+
   return (
     <button
       style={ {

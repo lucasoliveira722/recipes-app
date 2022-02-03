@@ -10,32 +10,34 @@ import AppContext from '../context/AppContext';
 export default function FoodDetails({ match: { params: { id } } }) {
   const urlRecommendation = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
   const { clickedFood } = useContext(AppContext);
-  const [detailsId, setDetailsId] = useState({});
+  const [detailsId, setDetailsId] = useState((clickedFood !== {}) ? clickedFood : {});
   const [idLocalS, setIdLocalS] = useState([]);
   const [idFinish, setIdFinish] = useState([]);
   const [show, setShow] = useState(false);
-  const [obj, setObj] = useState(clickedFood);
+  // const [obj, setObj] = useState((clickedFood !== {}) ? clickedFood : {});
   const history = useHistory();
   const detailsFavotire = [detailsId];
   useEffect(() => {
-    (async () => {
-      const resultId = await searchByIdRecipe(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
-      const details = resultId.meals;
-      setDetailsId(details[0]);
-      if (localStorage.getItem('inProgressRecipes')) {
-        const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
-        const { meals } = inProgressRecipes;
-        setIdLocalS(Object.keys(meals));
-        console.log('1', Object.keys(meals));
-      }
-      if (localStorage.getItem('doneRecipes')) {
-        const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
-        const ids = doneRecipes.map((recipe) => (
-          recipe.id
-        ));
-        setIdFinish(ids);
-      }
-    })();
+    if (detailsId === {}) {
+      (async () => {
+        const resultId = await searchByIdRecipe(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
+        const details = resultId.meals;
+        setDetailsId(details[0]);
+      })();
+    }
+    if (localStorage.getItem('inProgressRecipes')) {
+      const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
+      const { meals } = inProgressRecipes;
+      setIdLocalS(Object.keys(meals));
+      console.log('1', Object.keys(meals));
+    }
+    if (localStorage.getItem('doneRecipes')) {
+      const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+      const ids = doneRecipes.map((recipe) => (
+        recipe.id
+      ));
+      setIdFinish(ids);
+    }
   }, []);
   console.log(detailsId);
   const filter1 = Object.entries(detailsId);
@@ -73,20 +75,18 @@ export default function FoodDetails({ match: { params: { id } } }) {
   const popUp = () => {
     setShow(!show);
   };
-  if (clickedFood === false) {
-    setObj(detailsId);
-  }
+  console.log('1', clickedFood);
   return (
     <div>
-      {obj.idMeal
+      {detailsId.idMeal
         && (
           <>
 
-            <h1 data-testid="recipe-category">{obj.strCategory}</h1>
-            <h1 data-testid="recipe-title">{obj.strMeal}</h1>
+            <h1 data-testid="recipe-category">{detailsId.strCategory}</h1>
+            <h1 data-testid="recipe-title">{detailsId.strMeal}</h1>
             <img
               style={ { width: 200 } }
-              src={ obj.strMealThumb }
+              src={ detailsId.strMealThumb }
               alt="recipephoto"
               data-testid="recipe-photo"
             />
@@ -111,11 +111,11 @@ export default function FoodDetails({ match: { params: { id } } }) {
             <ul>
               {mapFilter(filter2Measure)}
             </ul>
-            <p data-testid="instructions">{obj.strInstructions}</p>
+            <p data-testid="instructions">{detailsId.strInstructions}</p>
             {/* Referencia para o uso do iframe */}
             {/* https://www.w3schools.com/html/html_iframe.asp */}
             <iframe
-              src={ obj.strYoutube.replace('watch?v=', 'embed/') }
+              src={ detailsId.strYoutube.replace('watch?v=', 'embed/') }
               frameBorder="0"
               allowFullScreen
               title="video"
