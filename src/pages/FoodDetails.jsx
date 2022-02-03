@@ -3,19 +3,17 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import searchByIdRecipe from '../services/searchByIdRecipe';
 import shareIcon from '../images/shareIcon.svg';
-import notFavorite from '../images/whiteHeartIcon.svg';
-import isFavorite from '../images/blackHeartIcon.svg';
 import RecommendationCaroussel from '../components/RecommendationCaroussel';
+import FavoriteButton from '../components/FavoriteButton';
 
 export default function FoodDetails({ match: { params: { id } } }) {
   const urlRecommendation = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
   const [detailsId, setDetailsId] = useState({});
   const [idLocalS, setIdLocalS] = useState([]);
   const [idFinish, setIdFinish] = useState([]);
-  const [idFavorite, setIdFavorite] = useState([]);
   const [show, setShow] = useState(false);
-  const [favIcon, setFavIcon] = useState(notFavorite);
   const history = useHistory();
+  const detailsFavotire = [detailsId];
   useEffect(() => {
     (async () => {
       const resultId = await searchByIdRecipe(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
@@ -34,20 +32,9 @@ export default function FoodDetails({ match: { params: { id } } }) {
         ));
         setIdFinish(ids);
       }
-      if (localStorage.getItem('favoriteRecipes')) {
-        const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
-        const ids = favoriteRecipes.map((recipe) => (recipe.id));
-        setIdFavorite(ids);
-        if (idFavorite.Number().includes(id)) {
-          setFavIcon(isFavorite);
-        } else {
-          setFavIcon(notFavorite);
-        }
-      }
     })();
   }, []);
   console.log(detailsId);
-  console.log(idFavorite.includes([id]));
   const filter1 = Object.entries(detailsId);
   const ingredientKey = 'strIngredient';
   const filter2Ingredient = filter1.filter((array) => (
@@ -83,33 +70,6 @@ export default function FoodDetails({ match: { params: { id } } }) {
   const popUp = () => {
     setShow(!show);
   };
-  const favoriteButton = () => {
-    if (localStorage.getItem('favoriteRecipes')) {
-      const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
-      favoriteRecipes.push({
-        id: [id],
-        type: 'comida',
-        nationality: [detailsId.strArea],
-        category: [detailsId.strCategory],
-        alcoholucOrNot: '',
-        name: [detailsId.strMeal],
-        image: [detailsId.strMealThumb],
-      });
-      localStorage.setItem('favoriteRecipes', JSON.stringify(favoriteRecipes));
-    } else {
-      localStorage.setItem('favoriteRecipes', JSON.stringify([{
-        id: [id],
-        type: 'comida',
-        nationality: [detailsId.strArea],
-        category: [detailsId.strCategory],
-        alcoholucOrNot: '',
-        name: [detailsId.strMeal],
-        image: [detailsId.strMealThumb],
-      }]));
-    }
-  };
-  console.log(idFavorite);
-  console.log(id);
   return (
     <div>
       <h1 data-testid="recipe-category">{detailsId.strCategory}</h1>
@@ -134,14 +94,7 @@ export default function FoodDetails({ match: { params: { id } } }) {
         <img src={ shareIcon } alt="Share Icon" />
       </button>
       {show && (<span>Link copied!</span>)}
-      <button
-        data-testid="favorite-btn"
-        type="button"
-        onClick={ () => { favoriteButton(); } }
-        src={ favIcon }
-      >
-        <img src={ favIcon } alt="favorite" />
-      </button>
+      <FavoriteButton details={ detailsFavotire } idPage={ id } type="Meal" />
       <ul>
         {mapFilter(filter2Ingredient)}
       </ul>

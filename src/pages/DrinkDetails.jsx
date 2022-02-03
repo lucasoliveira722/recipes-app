@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import searchByIdRecipe from '../services/searchByIdRecipe';
 import shareIcon from '../images/shareIcon.svg';
 import RecommendationCaroussel from '../components/RecommendationCaroussel';
+import FavoriteButton from '../components/FavoriteButton';
 
 export default function DrinkDetails({ match: { params: { id } } }) {
   const urlRecommendation = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
@@ -11,6 +12,7 @@ export default function DrinkDetails({ match: { params: { id } } }) {
   const [idLocalS, setIdLocalS] = useState([]);
   const [idFinish, setIdFinish] = useState([]);
   const [show, setShow] = useState(false);
+  const detailsFavorite = [detailsId];
   const history = useHistory();
   useEffect(() => {
     (async () => {
@@ -93,12 +95,7 @@ export default function DrinkDetails({ match: { params: { id } } }) {
         <img src={ shareIcon } alt="Share Icon" />
       </button>
       {show && (<span>Link copied!</span>)}
-      <button
-        data-testid="favorite-btn"
-        type="button"
-      >
-        FavoriteBtn
-      </button>
+      <FavoriteButton details={ detailsFavorite } idPage={ id } type="Drink" />
       <ul>
         {mapFilter(filter2Ingredient)}
       </ul>
