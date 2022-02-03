@@ -2,24 +2,25 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import searchByIdRecipe from '../services/searchByIdRecipe';
-import searchRecipes from '../services/searchRecipesApi';
 import shareIcon from '../images/shareIcon.svg';
+import notFavorite from '../images/whiteHeartIcon.svg';
+import isFavorite from '../images/blackHeartIcon.svg';
+import RecommendationCaroussel from '../components/RecommendationCaroussel';
 
 export default function FoodDetails({ match: { params: { id } } }) {
+  const urlRecommendation = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
   const [detailsId, setDetailsId] = useState({});
-  const [recommended, setRecommended] = useState([]);
   const [idLocalS, setIdLocalS] = useState([]);
   const [idFinish, setIdFinish] = useState([]);
+  const [idFavorite, setIdFavorite] = useState([]);
   const [show, setShow] = useState(false);
+  const [favIcon, setFavIcon] = useState(notFavorite);
   const history = useHistory();
   useEffect(() => {
     (async () => {
       const resultId = await searchByIdRecipe(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
       const details = resultId.meals;
       setDetailsId(details[0]);
-      const resultRe = await searchRecipes('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
-      const recommends = resultRe.drinks;
-      setRecommended(recommends);
       if (localStorage.getItem('inProgressRecipes')) {
         const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
         const { meals } = inProgressRecipes;
@@ -33,9 +34,20 @@ export default function FoodDetails({ match: { params: { id } } }) {
         ));
         setIdFinish(ids);
       }
+      if (localStorage.getItem('favoriteRecipes')) {
+        const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
+        const ids = favoriteRecipes.map((recipe) => (recipe.id));
+        setIdFavorite(ids);
+        if (idFavorite.Number().includes(id)) {
+          setFavIcon(isFavorite);
+        } else {
+          setFavIcon(notFavorite);
+        }
+      }
     })();
   }, []);
   console.log(detailsId);
+  console.log(idFavorite.includes([id]));
   const filter1 = Object.entries(detailsId);
   const ingredientKey = 'strIngredient';
   const filter2Ingredient = filter1.filter((array) => (
@@ -53,7 +65,6 @@ export default function FoodDetails({ match: { params: { id } } }) {
       </li>
     )
   ));
-  const maxRecommends = 6;
   const startButton = () => {
     if (localStorage.getItem('inProgressRecipes')) {
       const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
@@ -72,6 +83,33 @@ export default function FoodDetails({ match: { params: { id } } }) {
   const popUp = () => {
     setShow(!show);
   };
+  const favoriteButton = () => {
+    if (localStorage.getItem('favoriteRecipes')) {
+      const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
+      favoriteRecipes.push({
+        id: [id],
+        type: 'comida',
+        nationality: [detailsId.strArea],
+        category: [detailsId.strCategory],
+        alcoholucOrNot: '',
+        name: [detailsId.strMeal],
+        image: [detailsId.strMealThumb],
+      });
+      localStorage.setItem('favoriteRecipes', JSON.stringify(favoriteRecipes));
+    } else {
+      localStorage.setItem('favoriteRecipes', JSON.stringify([{
+        id: [id],
+        type: 'comida',
+        nationality: [detailsId.strArea],
+        category: [detailsId.strCategory],
+        alcoholucOrNot: '',
+        name: [detailsId.strMeal],
+        image: [detailsId.strMealThumb],
+      }]));
+    }
+  };
+  console.log(idFavorite);
+  console.log(id);
   return (
     <div>
       <h1 data-testid="recipe-category">{detailsId.strCategory}</h1>
@@ -99,8 +137,10 @@ export default function FoodDetails({ match: { params: { id } } }) {
       <button
         data-testid="favorite-btn"
         type="button"
+        onClick={ () => { favoriteButton(); } }
+        src={ favIcon }
       >
-        FavoriteBtn
+        <img src={ favIcon } alt="favorite" />
       </button>
       <ul>
         {mapFilter(filter2Ingredient)}
@@ -118,39 +158,7 @@ export default function FoodDetails({ match: { params: { id } } }) {
         title="video"
         data-testid="video"
       />
-      <div
-        style={ {
-          width: 450,
-          height: 200,
-          whiteSpace: 'nowrap',
-          overflow: 'scroll',
-        } }
-      >
-        {recommended.slice(0, maxRecommends)
-          .map((recipe, index) => (
-            <button
-              data-testid={ `${index}-recomendation-card` }
-              style={ { display: 'inline-block', width: 250 } }
-              type="button"
-              key={ index }
-            >
-              <div>
-                <img
-                  style={ { width: 200, height: 150 } }
-                  src={ recipe.strDrinkThumb }
-                  alt="recipe"
-                />
-                <span
-                  style={ { display: 'block' } }
-                  data-testid={ `${index}-recomendation-title` }
-                >
-                  {recipe.strDrink}
-                </span>
-
-              </div>
-            </button>
-          ))}
-      </div>
+      <RecommendationCaroussel url={ urlRecommendation } type="drinks" />
       {
         idFinish.includes(id) !== true && (
           <button

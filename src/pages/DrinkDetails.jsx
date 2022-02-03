@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import searchByIdRecipe from '../services/searchByIdRecipe';
-import searchRecipes from '../services/searchRecipesApi';
 import shareIcon from '../images/shareIcon.svg';
+import RecommendationCaroussel from '../components/RecommendationCaroussel';
 
 export default function DrinkDetails({ match: { params: { id } } }) {
+  const urlRecommendation = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
   const [detailsId, setDetailsId] = useState({});
-  const [recommended, setRecommended] = useState([]);
   const [idLocalS, setIdLocalS] = useState([]);
   const [idFinish, setIdFinish] = useState([]);
   const [show, setShow] = useState(false);
@@ -17,9 +17,6 @@ export default function DrinkDetails({ match: { params: { id } } }) {
       const result = await searchByIdRecipe(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
       const details = result.drinks;
       setDetailsId(details[0]);
-      const resultRe = await searchRecipes('https://www.themealdb.com/api/json/v1/1/search.php?s=');
-      const recommends = resultRe.meals;
-      setRecommended(recommends);
       if (localStorage.getItem('inProgressRecipes')) {
         const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
         const { cocktails } = inProgressRecipes;
@@ -53,7 +50,6 @@ export default function DrinkDetails({ match: { params: { id } } }) {
       </li>
     )
   ));
-  const maxRecommends = 6;
   const startButton = () => {
     if (localStorage.getItem('inProgressRecipes')) {
       const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
@@ -110,39 +106,7 @@ export default function DrinkDetails({ match: { params: { id } } }) {
         {mapFilter(filter2Measure)}
       </ul>
       <p data-testid="instructions">{detailsId.strInstructions}</p>
-      <div
-        style={ {
-          width: 450,
-          height: 200,
-          whiteSpace: 'nowrap',
-          overflow: 'scroll',
-        } }
-      >
-        {recommended.slice(0, maxRecommends)
-          .map((recipe, index) => (
-            <button
-              data-testid={ `${index}-recomendation-card` }
-              style={ { display: 'inline-block', width: 250 } }
-              type="button"
-              key={ index }
-            >
-              <div>
-                <img
-                  style={ { width: 180, height: 150 } }
-                  src={ recipe.strMealThumb }
-                  alt="recipe"
-                />
-                <span
-                  style={ { display: 'block' } }
-                  data-testid={ `${index}-recomendation-title` }
-                >
-                  {recipe.strMeal}
-                </span>
-
-              </div>
-            </button>
-          ))}
-      </div>
+      <RecommendationCaroussel url={ urlRecommendation } type="meals" />
       {
         idFinish.includes(id) !== true && (
           <button
