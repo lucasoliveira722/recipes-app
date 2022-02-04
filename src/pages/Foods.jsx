@@ -8,6 +8,7 @@ import AppContext from '../context/AppContext';
 export default function Foods() {
   const urlFood = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
   const urlFoodCategory = 'https://www.themealdb.com/api/json/v1/1/list.php?c=list';
+
   const { foodRecipes,
     setFoodRecipes,
     getRecipes,
@@ -16,6 +17,7 @@ export default function Foods() {
     getCategories,
     validation,
     categoryRecipes } = useContext(AppContext);
+
   useEffect(() => {
     (async () => {
       const { meals } = await getRecipes(urlFood);
@@ -24,8 +26,10 @@ export default function Foods() {
       setFoodCategories(mealsCategories.meals);
     })();
   }, []);
+
   // console.log(1, foodCategories);
   // console.log(recipes);
+
   const maxRecipes = 12;
   const mapFunction = (arr, type) => arr.map((recipe, index) => (
     <CardRecipe
@@ -38,6 +42,11 @@ export default function Foods() {
       recipe={ recipe }
     />
   ));
+
+  // useEffect para remapear os itens do array quando ele é atualizado
+  useEffect(() => {
+    mapFunction(foodRecipes, 'foods');
+  }, [foodRecipes]);
   // console.log('catF', categoryRecipes);
   return (
     <>
