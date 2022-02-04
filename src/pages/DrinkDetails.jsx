@@ -98,7 +98,12 @@ export default function DrinkDetails({ match: { params: { id } } }) {
               <img src={ shareIcon } alt="Share Icon" />
             </button>
             {show && (<span>Link copied!</span>)}
-            <FavoriteButton details={ detailsFavorite } idPage={ id } type="Drink" />
+            <FavoriteButton
+              details={ detailsFavorite }
+              idPage={ id }
+              type="Drink"
+              page="details"
+            />
             <ul>
               {mapFilter(filter2Ingredient)}
             </ul>

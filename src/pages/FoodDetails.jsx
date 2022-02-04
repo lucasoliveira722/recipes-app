@@ -106,7 +106,12 @@ export default function FoodDetails({ match: { params: { id } } }) {
               <img src={ shareIcon } alt="Share Icon" />
             </button>
             {show && (<span>Link copied!</span>)}
-            <FavoriteButton details={ detailsFavotire } idPage={ id } type="Meal" />
+            <FavoriteButton
+              details={ detailsFavotire }
+              idPage={ id }
+              type="Meal"
+              page="details"
+            />
             <ul>
               {mapFilter(filter2Ingredient)}
             </ul>
