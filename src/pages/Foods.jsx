@@ -24,7 +24,7 @@ export default function Foods() {
       setFoodCategories(mealsCategories.meals);
     })();
   }, []);
-  // console.log(1, foodCategories);
+  // console.log(foodCategories);
   // console.log(recipes);
   const maxRecipes = 12;
   const mapFunction = (arr, type) => arr.map((recipe, index) => (
