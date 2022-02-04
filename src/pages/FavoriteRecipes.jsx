@@ -60,9 +60,10 @@ export default function FavoriteRecipes() {
           Drink
         </button>
       </section>
-      {validation ? (
+      {validation && lsFavorites ? (
         mapFunction(lsFavorites)
-      ) : (mapFunction(filter))}
+      ) : null}
+      {filter ? mapFunction(filter) : null }
     </div>
 
   );
