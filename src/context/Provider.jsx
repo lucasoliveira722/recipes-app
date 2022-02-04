@@ -17,6 +17,7 @@ function Provider({ children }) {
   const [drinkCategories, setDrinkCategories] = useState([]);
   const [categoryRecipes, setCategoryRecipes] = useState([]);
   const [validation, setValidation] = useState(true);
+  const [clickedFood, setClickedFood] = useState({});
   const getRecipes = async (url) => {
     const result = await searchRecipes(url);
     return result;
@@ -55,6 +56,8 @@ function Provider({ children }) {
     getRecipesByCategory,
     validation,
     setValidation,
+    clickedFood,
+    setClickedFood,
   };
 
   return (
@@ -65,7 +68,7 @@ function Provider({ children }) {
 }
 
 Provider.propTypes = {
-  children: PropTypes.func.isRequired,
+  children: PropTypes.objectOf.isRequired,
 };
 
 export default Provider;

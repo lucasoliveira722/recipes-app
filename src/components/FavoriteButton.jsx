@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import isFavorite from '../images/blackHeartIcon.svg';
 import notFavorite from '../images/whiteHeartIcon.svg';
 
-export default function FavoriteButton({ details, idPage, type }) {
+export default function FavoriteButton({ details, idPage, type, page, index, func }) {
   const [favorite, setFavorite] = useState(false);
   const favoriteRecipesLocalStorage = () => {
     const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
@@ -54,8 +54,14 @@ export default function FavoriteButton({ details, idPage, type }) {
   return (
     <button
       type="button"
-      onClick={ () => favoriteBtn() }
-      data-testid="favorite-btn"
+      onClick={ page === 'details'
+        ? () => favoriteBtn() : (
+          () => {
+            favoriteBtn();
+            func();
+          }) }
+      data-testid={ page === 'details'
+        ? 'favorite-btn' : `${index}-horizontal-favorite-btn` }
       src={ favorite ? isFavorite : notFavorite }
     >
       <img
@@ -70,4 +76,5 @@ FavoriteButton.propTypes = {
   details: PropTypes.arrayOf,
   idPage: PropTypes.number,
   type: PropTypes.string,
+  page: PropTypes.string,
 }.isRequired;
