@@ -15,6 +15,7 @@ import FavoriteRecipes from '../pages/FavoriteRecipes';
 import ExploreFoodsIngredients from '../pages/ExploreFoodsIngredients';
 import ExploreDrinksIngredients from '../pages/ExploreDrinksIngredients';
 import ExploreFoodsNationality from '../pages/ExploreFoodsNationality';
+import ExploreDrinksNationality from '../pages/ExploreDrinksNationality';
 import ExploreDrinks from '../pages/ExploreDrinks';
 
 export default function routes() {
@@ -23,16 +24,21 @@ export default function routes() {
       <Route exact path="/" component={ Login } />
       <Route exact path="/foods" component={ Foods } />
       <Route exact path="/drinks" component={ Drinks } />
-      <Route path="/foods/:id" component={ FoodDetails } />
+      <Route exact path="/foods/:id" component={ FoodDetails } />
       <Route exact path="/drinks/:id" component={ DrinkDetails } />
-      <Route path="/foods/{id-da-receita}/in-progress" component={ FoodProgress } />
-      <Route path="/drinks/{id-da-receita}/in-progress" component={ DrinkProgress } />
+      <Route path="/foods/:id/in-progress" component={ FoodProgress } />
+      <Route path="/drinks/:id/in-progress" component={ DrinkProgress } />
       <Route exact path="/explore" component={ Explore } />
       <Route exact path="/explore/foods" component={ ExploreFoods } />
       <Route exact path="/explore/drinks" component={ ExploreDrinks } />
       <Route path="/explore/foods/ingredients" component={ ExploreFoodsIngredients } />
       <Route path="/explore/drinks/ingredients" component={ ExploreDrinksIngredients } />
       <Route path="/explore/foods/nationalities" component={ ExploreFoodsNationality } />
+      <Route
+        exact
+        path="/explore/drinks/nationalities"
+        component={ ExploreDrinksNationality }
+      />
       <Route path="/profile" component={ Profile } />
       <Route path="/done-recipes" component={ DoneRecipes } />
       <Route path="/favorite-recipes" component={ FavoriteRecipes } />
